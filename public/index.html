@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador - Sincronização de relógio</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+</head>
+<body>
+
+    <p id="socketId"></p>
+    <p>Outros clientes:</p>
+    <ul id='ids'></ul>
+    <p id="sending-clocks"></p>
+    <p id="updateTime"></p>
+
+    <script type="text/javascript">
+        var socket = io();
+        const id = document.getElementById('socketId');
+        const ids = document.getElementById('ids');
+
+        const otherClients = [];
+
+        socket.on('connect', function() {
+            const text = `Seu socket id é: ${socket.id}`;
+            document.getElementById('socketId').innerText = text;
+        });
+
+        socket.on('four-clients', function() {
+            const text = `Você e outros três clientes conectados... Enviando o relógio de cada cliente para o servidor.`;
+            document.getElementById('sending-clocks').innerText = text;
+            let date = Date.now();
+            socket.emit('clock', {
+                'socketId': socket.id,
+                'date': date
+            });
+        });
+
+        socket.on('result', function(data) {
+            const updateTime = `O relógio precisa ser ${data.signal} em ${data.update.split(":")[0]} minuto(s) e ${data.update.split(":")[1]} segundo(s)`;
+            document.getElementById('updateTime').innerText = updateTime;
+        });
+
+        socket.on('broadcast', function(data) {
+            for (socketId of data) {
+                if (!otherClients.includes(socketId) && otherClients.length <= 3) {
+                    otherClients.push(socketId);
+                    if (socketId != socket.id) {
+                        ids.appendChild(newItem(socketId));
+                    }
+                }
+            }
+        });
+
+        const newItem = (id) => {
+            const item = document.createElement('li');
+            item.innerText = id;
+            return item;
+        };
+
+    </script>
+</body>
+</html>
