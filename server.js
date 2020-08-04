@@ -25,7 +25,6 @@ io.on('connection', socket => {
         io.emit('broadcast', socketIds);
         if (socketIds.length == 4) {
             io.emit('four-clients');
-            clientsClock = []; // depois dos 4 inicia novamente
         }
     }
 
