@@ -32,6 +32,7 @@ io.on('connection', socket => {
         clientsClock.push(client);
         if (clientsClock.length == 4) {
             results = berkeley(clientsClock);
+            clientsClock = [];
             for (result of results) {
                 var data = {
                     'signal': result.update < 0 ? 'atrasado' : 'adiantado',

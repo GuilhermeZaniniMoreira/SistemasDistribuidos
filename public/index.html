@@ -44,7 +44,7 @@
 
         socket.on('broadcast', function(data) {
             for (socketId of data) {
-                if (!otherClients.includes(socketId) && otherClients.length <= 3) {
+                if ((!otherClients.includes(socketId)) && (otherClients.length <= 3)) {
                     otherClients.push(socketId);
                     if (socketId != socket.id) {
                         ids.appendChild(newItem(socketId));
