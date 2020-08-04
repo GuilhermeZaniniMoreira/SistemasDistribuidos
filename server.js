@@ -25,7 +25,8 @@ io.on('connection', socket => {
         io.emit('broadcast', socketIds);
         if (socketIds.length == 4) {
             io.emit('four-clients');
-            socketIds = [];
+            socketIds = []; // reiniciar
+            clients = 0; // reiniciar
         }
     }
 
@@ -33,6 +34,7 @@ io.on('connection', socket => {
         clientsClock.push(client);
         if (clientsClock.length == 4) {
             results = berkeley(clientsClock);
+            clientsClock = []; // reinciar
             for (result of results) {
                 var data = {
                     'signal': result.update < 0 ? 'atrasado' : 'adiantado',
