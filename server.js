@@ -5,21 +5,13 @@ const app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 
+app.use(express.static(path.join(__dirname, 'public')));
+app.set('views', path.join(__dirname, 'public'));
+app.engine('html', require('ejs').renderFile);
+app.set('view engine', 'html');
 
-app.set('view engine', 'ejs');
-
-//app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static(__dirname + '/public'));
-
-
-//app.set('views', path.join(__dirname, 'public'));
-//app.engine('html', require('ejs').renderFile);
-//app.set('view engine', 'html');
-
-app.use('/', (req, res) => {
-    //res.render('index');
-    res.send('Olá')
-
+app.get('/', (req, res) => {
+    res.render('index');
 });
 
 socketIds = [];
