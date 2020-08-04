@@ -40,6 +40,7 @@ io.on('connection', socket => {
                 io.to(result.socketId).emit('result', data);
             }
         }
+        clientsClock = []; // depois dos 4 inicia novamente
     });
 
     function berkeley(clientsClock) {
