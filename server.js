@@ -17,7 +17,9 @@ app.use(express.static(__dirname + '/public'));
 //app.set('view engine', 'html');
 
 app.use('/', (req, res) => {
-    res.render('index');
+    //res.render('index');
+    res.send('Olá')
+
 });
 
 socketIds = [];
